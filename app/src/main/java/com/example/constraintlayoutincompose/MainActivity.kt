@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                     start.linkTo(greenBox.end)
                     end.linkTo(parent.end)
                     width = Dimension.value(100.dp)
-                    height = Dimension.value(100.dp)
+                    height = Dimension.value(150.dp)
                 }
                 createHorizontalChain(greenBox, redBox, chainStyle = ChainStyle.Packed)
 
