@@ -3,7 +3,9 @@ package com.example.constraintlayoutincompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,7 +33,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             var sizeState by remember { mutableStateOf(200.dp)}
-            val size by animateDpAsState(targetValue = sizeState)
+            val size by animateDpAsState(
+                targetValue = sizeState,
+                tween(
+                    durationMillis = 3000,
+                    delayMillis = 300,
+                    easing = LinearOutSlowInEasing,
+
+                )
+                )
             Box (modifier = Modifier
                 .background(Color.Red)
                 .size(size),
