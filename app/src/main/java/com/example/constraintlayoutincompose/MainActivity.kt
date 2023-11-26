@@ -34,7 +34,9 @@ class MainActivity : ComponentActivity() {
                 .background(Color.Red)
                 .size(sizeState),
                 contentAlignment = Alignment.Center){
-                Button(onClick = { /* do it */ }) {
+                Button(onClick = {
+                 sizeState += 50.dp
+               }) {
                     Text ("increase size")
                 }
             }
