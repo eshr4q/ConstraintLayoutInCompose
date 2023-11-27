@@ -11,6 +11,7 @@ import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,6 +32,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,64 +55,115 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Box (
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize(),
-            ){
-                CircularProgressBar(percentage = 0.8f, number = 100 )
-
-            }
-
         }
     }
 }
 
 @Composable
-fun CircularProgressBar (
-    percentage: Float,
-    number: Int,
-    textUnit: TextUnit = 28.sp,
-    radius: Dp = 50.dp,
-    color: Color = Color.Red,
-    strokeWith: Dp = 8.dp,
-    animDuration: Int = 1000,
-    animDelay: Int = 0,
-    ) {
-    var animationPlayed by remember {
-        mutableStateOf(false)
+fun MusicKnob (
+    modifier: Modifier,
+    limitingAngle: Float = 25f,
+    onValueChange: (Float) -> Unit
+){
+    var rotation by remember {
+        mutableStateOf(limitingAngle)
     }
-    val curPercentage = animateFloatAsState (
-        targetValue = if (animationPlayed) percentage else 0f,
-        animationSpec = tween(
-            durationMillis = animDuration,
-            delayMillis = animDelay,
-
-        )
+    var touchX by remember {
+        mutableStateOf( 0f)
+    }
+    var touchy by remember {
+        mutableStateOf( 0f)
+    }
+    var centerx by remember {
+        mutableStateOf( 0f)
+    }
+    var centery by remember {
+        mutableStateOf( 0f)
+    }
+    Image(
+        painter = painterResource(id = R.drawable.music_knob),
+        contentDescription = "Music knob",
+        modifier = Modifier
+            .fillMaxSize()
+            .onGloballyPositioned {
+                val windowBounds = it.boundsInWindow()
+                centerx = windowBounds.size.width / 2f
+                centery = windowBounds.size.width / 2f
+            }
+            .pointerInteropFilter { event ->
+                touchx = event.x
+                touchy = event.y
+                var Angle
+            }
     )
-    LaunchedEffect(key1 =true){
-        animationPlayed = true
-    }
 
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.size(radius * 2f)
-    ) {
-        Canvas(modifier = Modifier.size(radius * 2f)) {
-            drawArc(
-                color = color,
-                -90f,
-                360 * curPercentage.value,
-                useCenter = false,
-                style = Stroke(strokeWith.toPx(), cap = StrokeCap.Round)
-            )
-        }
-        Text(
-            text = (curPercentage.value * number).toInt().toString(),
-            color = Color.Black,
-            fontWeight = FontWeight.Bold,
-        )
-    }
 }
+
+
+
+
+
+//  <How to Make an Animated Circular Progress Bar in Jetpack Compose - Android Studio Tutorial>****
+
+
+//            Box (
+//                contentAlignment = Alignment.Center,
+//                modifier = Modifier.fillMaxSize(),
+//            ){
+//                CircularProgressBar(percentage = 0.8f, number = 100 )
+//
+//            }
+//
+//        }
+//    }
+//}
+//
+//@Composable
+//fun CircularProgressBar (
+//    percentage: Float,
+//    number: Int,
+//    textUnit: TextUnit = 28.sp,
+//    radius: Dp = 50.dp,
+//    color: Color = Color.Red,
+//    strokeWith: Dp = 8.dp,
+//    animDuration: Int = 1000,
+//    animDelay: Int = 0,
+//    ) {
+//    var animationPlayed by remember {
+//        mutableStateOf(false)
+//    }
+//    val curPercentage = animateFloatAsState (
+//        targetValue = if (animationPlayed) percentage else 0f,
+//        animationSpec = tween(
+//            durationMillis = animDuration,
+//            delayMillis = animDelay,
+//
+//        )
+//    )
+//    LaunchedEffect(key1 =true){
+//        animationPlayed = true
+//    }
+//
+//    Box(
+//        contentAlignment = Alignment.Center,
+//        modifier = Modifier.size(radius * 2f)
+//    ) {
+//        Canvas(modifier = Modifier.size(radius * 2f)) {
+//            drawArc(
+//                color = color,
+//                -90f,
+//                360 * curPercentage.value,
+//                useCenter = false,
+//                style = Stroke(strokeWith.toPx(), cap = StrokeCap.Round)
+//            )
+//        }
+//        Text(
+//            text = (curPercentage.value * number).toInt().toString(),
+//            color = Color.Black,
+//            fontWeight = FontWeight.Bold,
+//        )
+//    }
+//}
 
 
 
