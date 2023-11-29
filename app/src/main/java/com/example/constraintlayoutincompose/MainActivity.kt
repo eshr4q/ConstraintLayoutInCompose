@@ -39,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.CornerRadius
@@ -142,6 +143,7 @@ fun volumeBar (
 
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MusicKnob (
     modifier: Modifier,
