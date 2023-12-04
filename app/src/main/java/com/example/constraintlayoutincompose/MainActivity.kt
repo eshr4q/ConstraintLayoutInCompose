@@ -89,7 +89,7 @@ class MainActivity : ComponentActivity() {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .border(1.dp, Color.Green, RoundedCornerShape(10.dp))
+                        .border(1.dp, Color.Red, RoundedCornerShape(10.dp))
                         .padding(30.dp)
                 ) {
                     var volume by remember {
