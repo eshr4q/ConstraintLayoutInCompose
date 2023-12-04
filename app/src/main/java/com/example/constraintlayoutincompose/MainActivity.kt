@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalComposeUiApi::class)
+
 package com.example.constraintlayoutincompose
 
 import android.nfc.cardemulation.OffHostApduService
@@ -122,7 +124,7 @@ fun volumeBar (
 ){
     BoxWithConstraints (
         contentAlignment = Alignment.Center,
-        modifier = modifier,
+        modifier = modifier
     ) {
         val barWidth = remember {
             constraints.maxWidth / (2f * barCount)
@@ -143,7 +145,7 @@ fun volumeBar (
 
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
+
 @Composable
 fun MusicKnob (
     modifier: Modifier,
