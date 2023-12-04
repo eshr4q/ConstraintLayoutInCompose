@@ -102,7 +102,7 @@ class MainActivity : ComponentActivity() {
                         volume = it
                     }
                     Spacer(modifier = Modifier.width(20.dp))
-                    volumeBar(
+                    VolumeBar(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(30.dp),
@@ -117,7 +117,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun volumeBar (
+fun VolumeBar (
     modifier: Modifier = Modifier,
     activeBars: Int = 0,
     barCount: Int = 10
@@ -132,7 +132,7 @@ fun volumeBar (
         Canvas(modifier = modifier) {
             for (i in 0 until barCount) {
                 drawRoundRect(
-                    color = if (i in 0 .. activeBars) Color.Magenta else Color.Gray,
+                    color = if (i in 0 .. activeBars) Color.Green else Color.DarkGray,
                     topLeft = Offset( i * barWidth * 2f + barWidth / 2f, 0f ),
                     size = Size (barWidth, constraints.maxHeight.toFloat()),
                     cornerRadius = CornerRadius( 0f)
