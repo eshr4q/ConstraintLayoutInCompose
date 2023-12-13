@@ -1,5 +1,5 @@
-@file:OptIn(ExperimentalComposeUiApi::class)
-
+//@file:OptIn(ExperimentalComposeUiApi::class)
+//
 package com.example.constraintlayoutincompose
 
 import android.nfc.cardemulation.OffHostApduService
@@ -26,11 +26,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -73,143 +76,236 @@ import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.roundToInt
 
-
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Box (
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color(0xFF101010))
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .border(1.dp, Color.Red, RoundedCornerShape(10.dp))
-                        .padding(30.dp)
+            OverlappingCardsTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ) {
-                    var volume by remember {
-                        mutableStateOf(0f)
-                    }
-                    var barCount = 20
-                    MusicKnob (
-                        modifier = Modifier.size(100.dp)
-                    ){
-                        volume = it
-                    }
-                    Spacer(modifier = Modifier.width(20.dp))
-                    VolumeBar(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(30.dp),
-                        activeBars = (barCount * volume).roundToInt(),
-                        barCount = barCount
-                    )
-            }
-            }
-
-        }
-    }
-}
-
-@Composable
-fun VolumeBar (
-    modifier: Modifier = Modifier,
-    activeBars: Int = 0,
-    barCount: Int = 10
-){
-    BoxWithConstraints (
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-    ) {
-        val barWidth = remember {
-            constraints.maxWidth / (2f * barCount)
-        }
-        Canvas(modifier = modifier) {
-            for (i in 0 until barCount) {
-                drawRoundRect(
-                    color = if (i in 0 .. activeBars) Color.Green else Color.DarkGray,
-                    topLeft = Offset( i * barWidth * 2f + barWidth / 2f, 0f ),
-                    size = Size (barWidth, constraints.maxHeight.toFloat()),
-                    cornerRadius = CornerRadius( 0f)
-                )
-            }
-        }
-
-    }
-
-
-}
-
-
-@Composable
-fun MusicKnob (
-    modifier: Modifier,
-    limitingAngle: Float = 25f,
-    onValueChange: (Float) -> Unit
-){
-    var rotation by remember {
-        mutableStateOf(limitingAngle)
-    }
-    var touchX by remember {
-        mutableStateOf( 0f)
-    }
-    var touchY by remember {
-        mutableStateOf( 0f)
-    }
-    var centerX by remember {
-        mutableStateOf( 0f)
-    }
-    var centerY by remember {
-        mutableStateOf( 0f)
-    }
-    Image(
-        painter = painterResource(id = R.drawable.music_knob),
-        contentDescription = "Music knob",
-        modifier = Modifier
-            .fillMaxSize()
-            .onGloballyPositioned {
-                val windowBounds = it.boundsInWindow()
-                centerX = windowBounds.size.width / 2f
-                centerY = windowBounds.size.width / 2f
-            }
-            .pointerInteropFilter { event ->
-                touchX = event.x
-                touchY = event.y
-                var angle = -atan2(centerX - touchX, centerY - touchY) * (180f / PI).toFloat()
-
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN,
-                    MotionEvent.ACTION_MOVE -> {
-                        if (angle !in -limitingAngle..limitingAngle) {
-                            val fixedAngle = if (angle in -180f..-limitingAngle) {
-                                360f + angle
-                            } else {
-                                angle
-                            }
-                            rotation = fixedAngle
-
-                            val percent = (fixedAngle - limitingAngle) / (360 - 2 * limitingAngle)
-                            onValueChange(percent)
-                            true
-
-                        } else false
-                    }
-
-                    else -> false
-
-
+                    OverlappingCards()
                 }
             }
-            .rotate(rotation)
+        }
+    }
+}
 
-    )
+@Composable
+fun OverlappingCards(){
+    Box(modifier = Modifier.fillMaxSize()){
+
+        Card(
+            modifier = Modifier
+                .size(200.dp, 300.dp)
+                .offset(40.dp, 40.dp),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 10.dp)
+        ) {
+            // Content of the first card
+            Text(text = "Hello Card1")
+        }
+
+        Card(
+            modifier = Modifier
+                .size(200.dp, 300.dp)
+                .offset(40.dp, 40.dp),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 10.dp)
+        ) {
+            // Content of the first card
+            Text(text = "Hello Card2")
+        }
+
+    }
+
 
 }
+
+
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    OverlappingCardsTheme {
+
+    }
+}
+
+
+
+
+
+//class MainActivity : ComponentActivity() {
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContent {
+//
+//        }
+//    }
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        MusicKnob*********
+
+//        setContent {
+//            Box (
+//                contentAlignment = Alignment.Center,
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .background(Color(0xFF101010))
+//            ) {
+//                Row(
+//                    horizontalArrangement = Arrangement.Center,
+//                    verticalAlignment = Alignment.CenterVertically,
+//                    modifier = Modifier
+//                        .border(1.dp, Color.Red, RoundedCornerShape(10.dp))
+//                        .padding(30.dp)
+//                ) {
+//                    var volume by remember {
+//                        mutableStateOf(0f)
+//                    }
+//                    var barCount = 20
+//                    MusicKnob (
+//                        modifier = Modifier.size(100.dp)
+//                    ){
+//                        volume = it
+//                    }
+//                    Spacer(modifier = Modifier.width(20.dp))
+//                    VolumeBar(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .height(30.dp),
+//                        activeBars = (barCount * volume).roundToInt(),
+//                        barCount = barCount
+//                    )
+//            }
+//            }
+//
+//        }
+//    }
+//}
+//
+//@Composable
+//fun VolumeBar (
+//    modifier: Modifier = Modifier,
+//    activeBars: Int = 0,
+//    barCount: Int = 10
+//){
+//    BoxWithConstraints (
+//        contentAlignment = Alignment.Center,
+//        modifier = modifier
+//    ) {
+//        val barWidth = remember {
+//            constraints.maxWidth / (2f * barCount)
+//        }
+//        Canvas(modifier = modifier) {
+//            for (i in 0 until barCount) {
+//                drawRoundRect(
+//                    color = if (i in 0 .. activeBars) Color.Green else Color.DarkGray,
+//                    topLeft = Offset( i * barWidth * 2f + barWidth / 2f, 0f ),
+//                    size = Size (barWidth, constraints.maxHeight.toFloat()),
+//                    cornerRadius = CornerRadius( 0f)
+//                )
+//            }
+//        }
+//
+//    }
+//
+//
+//}
+//
+//
+//@Composable
+//fun MusicKnob (
+//    modifier: Modifier,
+//    limitingAngle: Float = 25f,
+//    onValueChange: (Float) -> Unit
+//){
+//    var rotation by remember {
+//        mutableStateOf(limitingAngle)
+//    }
+//    var touchX by remember {
+//        mutableStateOf( 0f)
+//    }
+//    var touchY by remember {
+//        mutableStateOf( 0f)
+//    }
+//    var centerX by remember {
+//        mutableStateOf( 0f)
+//    }
+//    var centerY by remember {
+//        mutableStateOf( 0f)
+//    }
+//    Image(
+//        painter = painterResource(id = R.drawable.music_knob),
+//        contentDescription = "Music knob",
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .onGloballyPositioned {
+//                val windowBounds = it.boundsInWindow()
+//                centerX = windowBounds.size.width / 2f
+//                centerY = windowBounds.size.width / 2f
+//            }
+//            .pointerInteropFilter { event ->
+//                touchX = event.x
+//                touchY = event.y
+//                var angle = -atan2(centerX - touchX, centerY - touchY) * (180f / PI).toFloat()
+//
+//                when (event.action) {
+//                    MotionEvent.ACTION_DOWN,
+//                    MotionEvent.ACTION_MOVE -> {
+//                        if (angle !in -limitingAngle..limitingAngle) {
+//                            val fixedAngle = if (angle in -180f..-limitingAngle) {
+//                                360f + angle
+//                            } else {
+//                                angle
+//                            }
+//                            rotation = fixedAngle
+//
+//                            val percent = (fixedAngle - limitingAngle) / (360 - 2 * limitingAngle)
+//                            onValueChange(percent)
+//                            true
+//
+//                        } else false
+//                    }
+//
+//                    else -> false
+//
+//
+//                }
+//            }
+//            .rotate(rotation)
+//
+//    )
+//
+//}
 
 
 
